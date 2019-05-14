@@ -325,7 +325,7 @@ def myAlgo(dataC, data1B, data2B, data3B, dataSS, dataOF, money):
 
     data = {}
     data['selected_players'] = {
-        "c": {
+        "C": {
           "p1": {"name": p1C, "score": p1C_score, "price": p1C_price, "average": p1C_avg},
           "p2": {"name": p2C, "score": p2C_score, "price": p2C_price, "average": p2C_avg}
         },

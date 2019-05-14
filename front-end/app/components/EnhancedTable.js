@@ -18,10 +18,12 @@ import Tooltip from '@material-ui/core/Tooltip';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import { lighten } from '@material-ui/core/styles/colorManipulator';
+import { connect } from 'react-redux'
 
 let counter = 0;
 function createData(name, type, score, price, average) {
   counter += 1;
+  console.log({ id: counter, name, type, score, price, average })
   return { id: counter, name, type, score, price, average };
 }
 
@@ -50,8 +52,6 @@ function getSorting(order, orderBy) {
 }
 
 const rows = [
-
-
   { id: 'name', numeric: false, disablePadding: true, label: 'Name' },
   { id: 'price', numeric: true, disablePadding: false, label: 'Price' },
   { id: 'score', numeric: true, disablePadding: false, label: 'Score' },
@@ -195,7 +195,7 @@ const styles = theme => ({
     marginTop: theme.spacing.unit * 3,
   },
   table: {
-    minWidth: 1020,
+    minWidth: 100,
   },
   tableWrapper: {
     overflowX: 'auto',
@@ -203,24 +203,36 @@ const styles = theme => ({
 });
 
 class EnhancedTable extends React.Component {
+  componentWillReceiveProps(nextProps) {
+    // You don't have to do this check first, but it can help prevent an unneeded render
+    if (nextProps.AIdata !== this.state.AIdata) {
+      let data = []
+      Object.keys(nextProps.AIdata.selected_players).map((e, i) => {
+        let team_name = e
+        Object.keys(nextProps.AIdata.selected_players[e]).map((e, i) => {
+          let player_number = e
+          data.push(createData(
+            nextProps.AIdata.selected_players[team_name][player_number]['name'],
+            team_name,
+            nextProps.AIdata.selected_players[team_name][player_number]['score'],
+            nextProps.AIdata.selected_players[team_name][player_number]['price'],
+            nextProps.AIdata.selected_players[team_name][player_number]['average']
+          ))
+        })
+      })
+      this.setState({
+        data
+        // money_left: nextProps.AIdata.money.money_left,
+        // money_total: nextProps.AIdata.money.money_total
+      })
+    }
+  }
+
   state = {
-    order: 'asc',
+    order: 'desc',
     orderBy: 'score',
     selected: [],
     data: [
-      // createData('A', 305, 3.7, 67, 4.3, 1),
-      // createData('B', 452, 25.0, 51, 4.9, 1),
-      // createData('C', 262, 16.0, 24, 6.0, 1),
-      // createData('D', 159, 6.0, 24, 4.0, 1),
-      // createData('E', 356, 16.0, 49, 3.9, 1),
-      // createData('Honeycomb', 408, 3.2, 87, 6.5, 1),
-      // createData('Ice cream sandwich', 237, 9.0, 37, 4.3, 1),
-      // createData('Jelly Bean', 375, 0.0, 94, 0.0, 1),
-      // createData('KitKat', 518, 26.0, 65, 7.0, 1),
-      // createData('Lollipop', 392, 0.2, 98, 0.0, 1),
-      // createData('Marshmallow', 318, 0, 81, 2.0, 1),
-      // createData('Nougat', 360, 19.0, 9, 37.0, 1),
-      // createData('Oreo', 437, 18.0, 63, 4.0, 1),
     ],
     page: 0,
     rowsPerPage: 5,
@@ -315,10 +327,10 @@ class EnhancedTable extends React.Component {
                       <TableCell component="th" scope="row" padding="none">
                         {n.name}
                       </TableCell>
-                      <TableCell align="right">{n.calories}</TableCell>
-                      <TableCell align="right">{n.fat}</TableCell>
-                      <TableCell align="right">{n.carbs}</TableCell>
-                      <TableCell align="right">{n.protein}</TableCell>
+                      <TableCell align="right">{n.price}</TableCell>
+                      <TableCell align="right">{n.score}</TableCell>
+                      <TableCell align="right">{parseFloat("123.456").toFixed(2)}</TableCell>
+                      <TableCell align="right">{n.type}</TableCell>
                     </TableRow>
                   );
                 })}
@@ -354,4 +366,13 @@ EnhancedTable.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(EnhancedTable);
+const mapStateToProps = state => {
+  return {
+    AIdata: state.fetchedAIdata.data
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  null
+)(withStyles(styles)(EnhancedTable));
