@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+import json
 
 # C = 2 players, w=1
 # 1B = 2 players, w=1
@@ -319,30 +320,42 @@ def myAlgo(dataC, data1B, data2B, data3B, dataSS, dataOF, money):
         i = i + 1
         if (i > 100):
             interrupt = True
-        
 
-    print("The players selected are : \n")
-    print("In position C :")
-    print("- " + p1C + " (Score : " + str(p1C_score) + ")")
-    print("- " + p2C + " (Score : " + str(p2C_score) + ")\n")
-    print("In position 1B :")
-    print("- " + p11B + " (Score : " + str(p11B_score) + ")")
-    print("- " + p21B + " (Score : " + str(p21B_score) + ")\n")
-    print("In position 2B :")
-    print("- " + p12B + " (Score : " + str(p12B_score) + ")")
-    print("- " + p22B + " (Score : " + str(p22B_score) + ")\n")
-    print("In position 3B :")
-    print("- " + p13B + " (Score : " + str(p13B_score) + ")")
-    print("- " + p23B + " (Score : " + str(p23B_score) + ")\n")
-    print("In position SS :")
-    print("- " + p1SS + " (Score : " + str(p1SS_score) + ")")
-    print("- " + p2SS + " (Score : " + str(p1SS_score) + ")\n")
-    print("In position OF :")
-    print("- " + p1OF + " (Score : " + str(p1OF_score) + ")")
-    print("- " + p2OF + " (Score : " + str(p2OF_score) + ")")
-    print("- " + p3OF + " (Score : " + str(p3OF_score) + ")")
-    print("- " + p4OF + " (Score : " + str(p4OF_score) + ")")
-    print("- " + p5OF + " (Score : " + str(p5OF_score) + ")")
-    print("- " + p6OF + " (Score : " + str(p6OF_score) + ")\n")
 
-    print("We have left a total money of : {}M$, starting from {}M$".format(str(mon_curr), str(money)))
+
+    data = {}
+    data['selected_players'] = {
+        "c": {
+          "p1": {"name": p1C, "score": p1C_score, "price": p1C_price, "average": p1C_avg},
+          "p2": {"name": p2C, "score": p2C_score, "price": p2C_price, "average": p2C_avg}
+        },
+        "1B": {
+          "p1": {"name": p11B, "score": p11B_score, "price": p11B_price, "average": p11B_avg},
+          "p2": {"name": p21B, "score": p21B_score, "price": p21B_price, "average": p21B_avg}
+        },
+        "2B": {
+          "p1": {"name": p12B, "score": p12B_score, "price": p12B_price, "average": p12B_avg},
+          "p2": {"name": p22B, "score": p22B_score, "price": p22B_price, "average": p22B_avg}
+        },
+        "3B": {
+          "p1": {"name": p13B, "score": p13B_score, "price": p13B_price, "average": p13B_avg},
+          "p2": {"name": p23B, "score": p23B_score, "price": p23B_price, "average": p23B_avg}
+        },
+        "SS": {
+          "p1": {"name": p1SS, "score": p1SS_score, "price": p1SS_price, "average": p1SS_avg},
+          "p2": {"name": p2SS, "score": p2SS_score, "price": p2SS_price, "average": p2SS_avg}
+        },
+        "OF": {
+          "p1": {"name": p1OF, "score": p1OF_score, "price": p1OF_price, "average": p1OF_avg},
+          "p2": {"name": p2OF, "score": p2OF_score, "price": p2OF_price, "average": p2OF_avg},
+          "p3": {"name": p3OF, "score": p3OF_score, "price": p3OF_price, "average": p3OF_avg},
+          "p4": {"name": p4OF, "score": p4OF_score, "price": p4OF_price, "average": p4OF_avg},
+          "p5": {"name": p5OF, "score": p5OF_score, "price": p5OF_price, "average": p5OF_avg},
+          "p6": {"name": p6OF, "score": p6OF_score, "price": p6OF_price, "average": p6OF_avg}
+        },
+    }
+    data['money'] = {
+      "left": mon_curr,
+      "total": money
+    }
+    return json.dumps(data)
