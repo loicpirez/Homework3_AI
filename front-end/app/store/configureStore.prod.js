@@ -4,15 +4,16 @@ import thunk from 'redux-thunk';
 import { createHashHistory } from 'history';
 import { routerMiddleware } from 'connected-react-router';
 import createRootReducer from '../reducers';
-import type { counterStateType } from '../reducers/types';
+import * as fetchAIDataActions from '../actions/fetch-ai-data.js';
+import type { fetchAIDataStateType } from '../reducers/types';
 
 const history = createHashHistory();
 const rootReducer = createRootReducer(history);
 const router = routerMiddleware(history);
 const enhancer = applyMiddleware(thunk, router);
 
-function configureStore(initialState?: counterStateType) {
-  return createStore<*, counterStateType, *>(
+function configureStore(initialState?: fetchAIDataStateType) {
+  return createStore<*, fetchAIDataStateType, *>(
     rootReducer,
     initialState,
     enhancer
