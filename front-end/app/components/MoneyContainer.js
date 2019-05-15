@@ -22,8 +22,8 @@ class MoneyContainer extends React.Component {
     if (nextProps.AIdata !== this.state.AIdata) {
       console.log(nextProps.AIdata.money)
       this.setState({
-        money_left: nextProps.AIdata.money.left,
-        money_total: nextProps.AIdata.money.total
+        money_left: nextProps.AIdata.money.total,
+        money_total: nextProps.AIdata.money.left
       })
     }
   }
